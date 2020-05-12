@@ -29,8 +29,8 @@ let isPainting = false
 const initDrawing = () => {
   ctx.fillStyle = INIT_BG_COLOR
   ctx.fillRect(0, 0, WIDTH, HEIGHT)
-  // ctx.strokeStyle = INIT_COLOR
-  // ctx.lineWidth = 3
+  ctx.strokeStyle = INIT_COLOR
+  ctx.lineWidth = 2
   isPainting = false
 }
 
@@ -46,11 +46,14 @@ const handleMouseMove = (ev) => {
   const {pointX, pointY} = mousePoint(canvas, ev)
   const x = ev.offsetX;
   const y = ev.offsetY;
-  if(isPainting) {
-    ctx.beginPath();
-    ctx.moveTo(pointX, pointY);
-    ctx.lineTo(x, y);
-    ctx.stroke();
+  if (!isPainting) {
+    ctx.beginPath(); // 새로운 시작점그림
+    ctx.moveTo(pointX, pointY); // 다음 점을 그리는데, 점과 점은 색상을 칠하지 않는다.
+    console.log('isPainting false')
+  } else  {
+    ctx.lineTo(x, y); // 다음 점을 그린다, 이때 점과 점은 색상을 칠한다.
+    ctx.stroke(); // 칠하기.
+    console.log('isPainting true')
   }
 }
 const main = () => {
@@ -64,6 +67,7 @@ const main = () => {
     colorsWrap.appendChild(el)
     el.addEventListener('click', (ev) => console.log(ev.target))
   })
+
   canvas.addEventListener('mousedown', handleMouseDown)
   canvas.addEventListener('mousemove', handleMouseMove)
   canvas.addEventListener('mouseup', handleMouseUp)
